@@ -1,0 +1,12 @@
+# GET request
+curl http://localhost:8080/hello
+
+curl http://localhost:8080/hello/dirk
+
+# PUT request
+curl -X PUT -d "someData" -H "content-type: text/plain" http://localhost:8080/hello
+
+# POST request
+curl -X POST http://localhost:8080/hello?timestamp=2019-11-25T14:00
+
+
