@@ -1,0 +1,14 @@
+public class SkiPass {
+  private String id;
+  private LocalDateTime validFrom;
+  private LocalDateTime validTo;
+  private boolean blocked;
+
+  public SkiPass(LocalDateTime validFrom, LocalDateTime validTo) {
+    this.validFrom = validFrom;
+    this.validTo = validTo;
+
+    this.id = UUID.randomUUID().toString();
+  }
+
+  // Getter, setter, toString as you like
