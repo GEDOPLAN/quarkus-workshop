@@ -24,24 +24,20 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 @ApplicationScoped
-@Path(PersonResource.PATH)
+@Path("person")
 public class PersonResource {
-  public static final String PATH = "person";
-  public static final String ID_NAME = "id";
-  public static final String ID_TEMPLATE = "{" + ID_NAME + "}";
-
   @Inject
   PersonRepository personRepository;
 
-  @Inject
-  Log log;
+  Log log = LogFactory.getLog(PersonResource.class);
 
   /*
    * GET all persons.
    *
-   * Sample call: curl http://localhost:8080/person
+   * Sample call: curl -i http://localhost:8080/person
    */
   @GET
   @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -52,12 +48,12 @@ public class PersonResource {
   /*
    * GET person by id.
    *
-   * Sample call: curl http://localhost:8080/person/2
+   * Sample call: curl -i http://localhost:8080/person/2
    */
   @GET
-  @Path(ID_TEMPLATE)
+  @Path("{id}")
   @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-  public Person getById(@PathParam(ID_NAME) Integer id) {
+  public Person getById(@PathParam("id") Integer id) {
     Person person = this.personRepository.findById(id);
     if (person != null) {
       return person;
@@ -69,12 +65,12 @@ public class PersonResource {
   /*
    * PUT (overwrite) person by id.
    *
-   * Sample call: curl -X PUT -H 'content-type: application/json' -d '{"id":2,"firstname":"Donald","name":"Trump"}' http://localhost:8080/person/2
+   * Sample call: curl -i -X PUT -H 'content-type: application/json' -d '{"id":2,"firstname":"Donald","name":"Trump"}' http://localhost:8080/person/2
    */
   @PUT
-  @Path(ID_TEMPLATE)
+  @Path("{id}")
   @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-  public void update(@PathParam(ID_NAME) Integer id, Person Person) {
+  public void update(@PathParam("id") Integer id, Person Person) {
     if (!id.equals(Person.getId())) {
       throw new BadRequestException("id of updated object must be unchanged");
     }
@@ -85,7 +81,7 @@ public class PersonResource {
   /*
    * POST (create) person.
    *
-   * Sample call: curl -X POST -H 'content-type: application/json' -d '{"firstname":"Tick","name":"Duck"}' http://localhost:8080/person -i
+   * Sample call: curl -i -X POST -H 'content-type: application/json' -d '{"firstname":"Tick","name":"Duck"}' http://localhost:8080/person -i
    */
   @POST
   @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
@@ -98,8 +94,7 @@ public class PersonResource {
 
     URI createdUri = uriInfo
         .getAbsolutePathBuilder()
-        .path(ID_TEMPLATE)
-        .resolveTemplate(ID_NAME, Person.getId())
+        .path(Person.getId().toString())
         .build();
     return Response.created(createdUri).build();
   }
@@ -107,11 +102,11 @@ public class PersonResource {
   /*
    * DELETE person.
    *
-   * Sample call: curl -X DELETE http://localhost:8080/person/4
+   * Sample call: curl -i -X DELETE http://localhost:8080/person/3
    */
   @DELETE
-  @Path(ID_TEMPLATE)
-  public void delete(@PathParam(ID_NAME) Integer id) {
+  @Path("{id}")
+  public void delete(@PathParam("id") Integer id) {
     this.personRepository.removeById(id);
   }
 }
