@@ -16,12 +16,6 @@ public class PersonRepository {
   @Inject
   EntityManager entityManager;
 
-  public long countAll() {
-    return this.entityManager
-        .createQuery("select count(x) from Person x", Long.class)
-        .getSingleResult();
-  }
-
   public Person findById(Integer id) {
     return this.entityManager.find(Person.class, id);
   }
