@@ -1,0 +1,16 @@
+@ApplicationScoped
+public class GateService {
+
+  @Inject
+  @RestClient
+  SkiPassManager skiPassManager;
+
+  public boolean isValid(String skiPassId) {
+    LocalDateTime validTo = fetch(skiPassId);
+    return validTo != null && validTo.isAfter(LocalDateTime.now());
+  }
+
+  private LocalDateTime fetch(String skiPassId) {
+    return this.skiPassManager.getValidTo(skiPassId);
+  }
+
