@@ -1,0 +1,8 @@
+amqp-username=quarkus
+amqp-password=quarkus
+
+mp.messaging.incoming.skipassInvalidation.connector=smallrye-amqp
+mp.messaging.incoming.skipassInvalidation.address=skipassInvalidation
+mp.messaging.incoming.skipassInvalidation.durable=false
+mp.messaging.incoming.skipassInvalidation.broadcast=true
+
