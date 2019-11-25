@@ -8,6 +8,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -45,5 +46,17 @@ public class SkiPassResource {
   @Produces(MediaType.APPLICATION_JSON)
   public List<SkiPass> getAll() {
     return this.skiPassRepository.findAll();
+  }
+
+  @GET
+  @Path("{id}/validTo")
+  @Produces(MediaType.APPLICATION_JSON)
+  public LocalDateTime getValidTo(@PathParam("id") String id) {
+    SkiPass skiPass = this.skiPassRepository.findById(id);
+    LocalDateTime now = LocalDateTime.now();
+    return skiPass != null && skiPass.getValidFrom().isBefore(now) && skiPass.getValidTo().isAfter(now) && !skiPass.isBlocked()
+        ? skiPass.getValidTo()
+        : LocalDateTime.MIN;
+
   }
 }

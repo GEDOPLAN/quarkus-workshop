@@ -25,4 +25,8 @@ public class SkiPassRepository {
         .createQuery("select s from SkiPass s", SkiPass.class)
         .getResultList();
   }
+
+  public SkiPass findById(String id) {
+    return this.entityManager.find(SkiPass.class, id);
+  }
 }
