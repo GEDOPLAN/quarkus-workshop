@@ -1,9 +1,15 @@
 package jvmcon.skipass.manager.entity;
 
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class SkiPass {
+  @Id
   private String id;
   private LocalDateTime validFrom;
   private LocalDateTime validTo;
